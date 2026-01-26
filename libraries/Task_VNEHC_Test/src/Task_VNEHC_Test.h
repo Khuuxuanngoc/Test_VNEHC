@@ -466,11 +466,11 @@ uint32_t sumAnalog_CheckPullDown_Port3()
   return tempui32;
 }
 
-uint8_t isPullDown_Port3_OK(uint8_t paShowDebug = 0)
+uint8_t isPullDown_Port3_OK(uint8_t paShowDebug = 0, uint32_t paMin = 0, uint32_t paMax = 10)
 {
   uint32_t tempui32 = this->sumAnalog_CheckPullDown_Port3();
   
-  if(tempui32 < (10))   // ~ 0.25V
+  if(IS_INRANGE(tempui32, paMin, paMax))   // ~ 0.25V
   {
     return VNEHC_List_Error_None;
   }
@@ -483,14 +483,27 @@ uint8_t isPullDown_Port3_OK(uint8_t paShowDebug = 0)
   return VNEHC_List_Error_PORT3_R_PULLDOWN_FAIL;
 }
 
-uint8_t isPullUp_Port3_OK(uint8_t paShowDebug = 0)
+uint8_t isPullUp_Port3_OK(uint8_t paShowDebug = 0, uint32_t paMin = (ADCVALUE_PULL_UP_THRESHOLD - ADCVALUE_PULL_UP_THRESHOLD_ERROR), uint32_t paMax = (ADCVALUE_PULL_UP_THRESHOLD + ADCVALUE_PULL_UP_THRESHOLD_ERROR), uint32_t paTimeOutms = 10)
 {
-  uint32_t tempui32 = this->sumAnalog_CheckPullDown_Port3();
-  
-  if(IS_INRANGE(tempui32, ADCVALUE_PULL_UP_THRESHOLD - ADCVALUE_PULL_UP_THRESHOLD_ERROR, ADCVALUE_PULL_UP_THRESHOLD + ADCVALUE_PULL_UP_THRESHOLD_ERROR))   // ~ 3V3
+  uint32_t tempui32 = 0;
+  while(paTimeOutms > 0)
   {
-    return VNEHC_List_Error_None;
+    tempui32 = this->sumAnalog_CheckPullDown_Port3();
+    if(IS_INRANGE(tempui32, paMin, paMax))   // ~ 3V3
+    {
+      return VNEHC_List_Error_None;
+    }
+    this->delayms(10);
+    paTimeOutms -= 10;
   }
+
+  // uint32_t tempui32 = this->sumAnalog_CheckPullDown_Port3();
+  
+  // if(IS_INRANGE(tempui32, paMin, paMax))   // ~ 3V3
+  // {
+  //   return VNEHC_List_Error_None;
+  // }
+
   if(paShowDebug)
   {
     VNEHC_SHOW_LOG(F("R Pull UP ERROR: "));
