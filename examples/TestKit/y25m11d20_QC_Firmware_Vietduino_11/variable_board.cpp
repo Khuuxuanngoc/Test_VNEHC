@@ -430,7 +430,7 @@
       {21,   41,   _PIN_TYPE_D_,   MODE_PIN_IO,    25,    "41"},
       {22,   42,   _PIN_TYPE_D_,   MODE_PIN_IO,    34,    "42"},
       {23,   47,   _PIN_TYPE_D_,   MODE_PIN_IO,    23,    "47"},
-      {24,   48,   _PIN_TYPE_D_,   MODE_PIN_IO,    24,    "48"},
+      // {24,   48,   _PIN_TYPE_D_,   MODE_PIN_IO,    24,    "48"},
       {25,   8,    _PIN_TYPE_D_,    MODE_PIN_IO,   12,   "8DA"},
       {26,   9,    _PIN_TYPE_D_,    MODE_PIN_IO,   17,   "9CL"},
       {27,   0,    _PIN_TYPE_D_,    MODE_PIN_IO,   27,   "IO0"},
