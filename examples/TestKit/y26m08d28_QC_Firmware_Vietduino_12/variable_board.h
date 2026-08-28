@@ -17,39 +17,63 @@
 #if defined(ARDUINO_AVR_ADK)       
     #define BOARD "Mega Adk"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_BT)    // Bluetooth
     #define BOARD "Bt"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_DUEMILANOVE)       
     #define BOARD "Duemilanove"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_ESPLORA)       
     #define BOARD "Esplora"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_ETHERNET)       
     #define BOARD "Ethernet"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_FIO)       
     #define BOARD "Fio"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_GEMMA)
     #define BOARD "Gemma"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_LEONARDO)       
     #define BOARD "Leonardo"
     #define NUM_DIGITAL_PINS_2        20
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_LILYPAD)
     #define BOARD "Lilypad"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_LILYPAD_USB)
     #define BOARD "Lilypad Usb"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_MEGA)
     #define BOARD "Mega"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_MEGA2560)       
     #define BOARD "Mega 2560"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_MICRO)       
     #define BOARD "Micro"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
@@ -59,6 +83,8 @@
 #elif defined(ARDUINO_AVR_NANO)       
     #define BOARD "Nano"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_NG)       
     #define BOARD "NG"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
@@ -74,6 +100,8 @@
 #elif defined(ARDUINO_AVR_UNO)       
     #define BOARD "Uno"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    #define KXN_LED_DEFAULT     13
+    #define KXN_LED_ACTIVE_DEFAULT      1
 #elif defined(ARDUINO_AVR_YUN)       
     #define BOARD "Yun"
     #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
@@ -120,6 +148,15 @@
         #define KXN_LED_DEFAULT     2
         #define KXN_LED_ACTIVE_DEFAULT      1
     #endif
+
+#elif defined(ARDUINO_ARCH_STM32)
+    #define BOARD "Bluepill STM32F103C8"
+    #define NUM_DIGITAL_PINS_2        NUM_DIGITAL_PINS
+    // #if defined(STM32F103C8)
+        #define KXN_LED_DEFAULT     PC13
+        #define KXN_LED_ACTIVE_DEFAULT      1
+    // #endif
+
 #else
     #error "Unknown board"
 #endif
@@ -164,6 +201,18 @@ enum{
     bool lastError;
     };
     extern void ESP32_scanWiFi_init();
+
+#elif defined(ARDUINO_ARCH_STM32)
+    typedef struct pin_info{
+    uint8_t lastValue;
+    uint32_t pin;
+    uint8_t type;
+    uint8_t mode;
+    uint8_t posOnChip;
+    uint8_t name[8];
+    bool lastError;
+    };
+
 #else
     typedef struct pin_info{
     uint8_t lastValue;

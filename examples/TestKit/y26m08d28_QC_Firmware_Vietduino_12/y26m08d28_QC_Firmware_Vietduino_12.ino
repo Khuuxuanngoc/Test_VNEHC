@@ -2,6 +2,8 @@
  Note:
   - 28/8/2026: y26m08d28_QC_Firmware_Vietduino_12
     - Add board VNEHC bluepill
+    - Edit: 
+      - Replace my_pin_array[11].pin with KXN_LED_DEFAULT
 
   - y21m10d15: 
     + Add variable_board.h
@@ -154,13 +156,18 @@ CREATE_FUNCTION(blink_led_ok){
     ESP8266_BlinkScanWiFi();
   #else
     #ifndef KT_TEST
-    pinMode(my_pin_array[11].pin, OUTPUT);
+    // pinMode(my_pin_array[11].pin, OUTPUT);
+    pinMode(KXN_LED_DEFAULT, OUTPUT);
+    
     #endif
 
     while(1){
       static int tempState = 1;
       #ifndef KT_TEST
-        if(!b_tested_low_bit) digitalWrite(my_pin_array[11].pin, tempState^1);  
+        // if(!b_tested_low_bit) digitalWrite(my_pin_array[11].pin, tempState^1);  
+        // else Serial.println(F("Vietduino Test wire done, all pins are OK!"));
+
+        if(!b_tested_low_bit) digitalWrite(KXN_LED_DEFAULT, tempState^1);  
         else Serial.println(F("Vietduino Test wire done, all pins are OK!"));
       #endif
       

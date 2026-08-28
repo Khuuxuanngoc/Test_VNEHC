@@ -580,6 +580,41 @@
                   ESP8266_blinkLed(scanResult);
             }
       }
+
+#elif defined(ARDUINO_ARCH_STM32)
+      pin_info my_pin_array[] = {
+            {1, PB12, _PIN_TYPE_D_, MODE_PIN_IO, 25, "PB12"},
+            {2, PB13, _PIN_TYPE_D_, MODE_PIN_IO, 26, "PB13"},
+            {3, PB14, _PIN_TYPE_D_, MODE_PIN_IO, 27, "PB14"},
+            {4, PB15, _PIN_TYPE_D_, MODE_PIN_IO, 28, "PB15"},
+            {5, PA8, _PIN_TYPE_D_, MODE_PIN_IO, 29, "PA8"},
+            {6, PA9, _PIN_TYPE_D_, MODE_PIN_IO, 30, "PA9"},
+            {7, PA10, _PIN_TYPE_D_, MODE_PIN_IO, 31, "PA10"},
+            {8, PA15, _PIN_TYPE_D_, MODE_PIN_IO, 38, "PA15"},
+            {9, PB3, _PIN_TYPE_D_, MODE_PIN_IO, 39, "PB3"},
+            {10, PB4, _PIN_TYPE_D_, MODE_PIN_IO, 40, "PB4"},
+            {11, PB5, _PIN_TYPE_D_, MODE_PIN_IO, 41, "PB5"},
+            {12, PB6, _PIN_TYPE_D_, MODE_PIN_IO, 42, "PB6"},
+            {13, PB7, _PIN_TYPE_D_, MODE_PIN_IO, 44, "PB7"},
+            {14, PB8, _PIN_TYPE_D_, MODE_PIN_IO, 45, "PB8"},
+            {15, PB9, _PIN_TYPE_D_, MODE_PIN_IO, 46, "PB9"},
+            {16, PC13, _PIN_TYPE_D_, MODE_PIN_IO, 2, "PC13"},
+            {17, PC14, _PIN_TYPE_D_, MODE_PIN_IO, 3, "PC14"},
+            {18, PC15, _PIN_TYPE_A_, MODE_PIN_IO, 4, "PC15"},
+            {19, PA0, _PIN_TYPE_D_, MODE_PIN_IO, 10, "PA0"},
+            {20, PA1, _PIN_TYPE_D_, MODE_PIN_IO, 11, "PA1"},
+            {21, PA2, _PIN_TYPE_D_, MODE_PIN_IO, 12, "PA2"},
+            {22, PA3, _PIN_TYPE_D_, MODE_PIN_IO, 13, "PA3"},
+            {23, PA4, _PIN_TYPE_D_, MODE_PIN_IO, 14, "PA4"},
+            {24, PA5, _PIN_TYPE_D_, MODE_PIN_IO, 15, "PA5"},
+            {25, PA6, _PIN_TYPE_D_, MODE_PIN_IO, 16, "PA6"},
+            {26, PA7, _PIN_TYPE_D_, MODE_PIN_IO, 17, "PA7"},
+            {27, PB0, _PIN_TYPE_D_, MODE_PIN_IO, 18, "PB0"},
+            {28, PB1, _PIN_TYPE_D_, MODE_PIN_IO, 19, "PB1"},
+            {29, PB10, _PIN_TYPE_D_, MODE_PIN_IO, 21, "PB10"},
+            {30, PB11, _PIN_TYPE_D_, MODE_PIN_IO, 22, "PB11"},
+
+      };
 #endif
 
 uint16_t sizeArray = sizeof(my_pin_array)/sizeof(pin_info);
