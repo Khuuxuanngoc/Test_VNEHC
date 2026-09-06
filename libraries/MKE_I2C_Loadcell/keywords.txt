@@ -1,0 +1,36 @@
+#######################################
+# Syntax Coloring Map for MKE_I2C_Loadcell
+#######################################
+
+#######################################
+#       Datatypes (KEYWORD1)          # 
+#######################################
+
+MKE_I2C_Loadcell	KEYWORD1
+MKE_I2C_Loadcell_Advanced	KEYWORD1
+
+#######################################
+#  Methods and Functions (KEYWORD2)   #
+#######################################
+
+begin	KEYWORD2
+getGram	KEYWORD2
+tare	KEYWORD2
+calibrate	KEYWORD2
+getScale	KEYWORD2
+setScale	KEYWORD2
+
+setFilterLevel	KEYWORD2
+getFilterLevel	KEYWORD2
+
+setKalmanParameters	KEYWORD2
+getKalmanMea	KEYWORD2
+getKalmanEst	KEYWORD2
+getKalmanQ	KEYWORD2
+
+setEepromSaveDelay	KEYWORD2
+getEepromSaveDelay	KEYWORD2
+
+#######################################
+#         Constants (LITERAL1)        #
+#######################################

@@ -74,7 +74,10 @@ CREATE_TASK(Task_VNEHC_Test)
 INA3221 *INA;
 TwoWire *VNEHC_Wire;
 Stream *VNEHC_Serial;
+uint8_t isPWR_ON = 0;
+
 void (*user_callback_help)(void);
+void (*user_callback_CMD)(void*);
 void (*user_callback_OverCurrrent)(float current_mA);
 
 user_callback_OverCurrrentWithClassInstance p_funct_OverCurrrentWithClassInstance = NULL;
@@ -91,6 +94,24 @@ uint8_t setup(TwoWire *wire = &Wire, Stream *serial = &Serial)
   VNEHC_Wire = wire;
   VNEHC_Serial = serial;
   OutPWR_setup();
+  uint8_t tempError = 0;
+
+  tempError = checkVolSignal4P_ShortWire(PIN_PORT4_SDA, PIN_PORT4_SCL);
+  if(tempError == VNEHC_List_Error_SIG_PIN3_SHORTED_PIN4)
+  {
+    VNEHC_SHOW_LOG_LN(F("VNEHC Test: Port4 SDA shorted SCL!"));
+    OutPWR_off();
+    return VNEHC_List_Error_SIG_PIN3_SHORTED_PIN4;
+  }
+
+  tempError = checkVolSignal4P();
+  if(tempError != VNEHC_List_Error_None)
+  {
+    OutPWR_off();
+    return tempError;
+  }
+
+  
 
   VNEHC_Wire->begin();
   if(INA == NULL)
@@ -136,11 +157,15 @@ void OutPWR_setup()
 void OutPWR_on()
 {
   digitalWrite(PIN_FET_N, FET_N_ACTIVE);
+  VNEHC_SHOW_LOG_LN(F("PWR ON!"));
+  isPWR_ON = 1;
 }
 
 void OutPWR_off()
 {
   digitalWrite(PIN_FET_N, !FET_N_ACTIVE);
+  VNEHC_SHOW_LOG_LN(F("PWR OFF!"));
+  isPWR_ON = 0;
 }
 
 uint8_t setOutPWR_5V()
@@ -396,8 +421,11 @@ uint8_t checkVolSignal4P()
   delay(10);
   int adcValue_SDA = analogRead(PIN_PORT4_SDA);
   int adcValue_SCL = analogRead(PIN_PORT4_SCL);
-  if(adcValue_SDA > ADCVALUE_3V3_THRESHOLD || adcValue_SCL > ADCVALUE_3V3_THRESHOLD)
+  
+  // if(adcValue_SDA > ADCVALUE_3V3_THRESHOLD || adcValue_SCL > ADCVALUE_3V3_THRESHOLD)
+  if(!IS_INRANGE(adcValue_SDA, ADCVALUE_3V3_THRESHOLD - 100, ADCVALUE_3V3_THRESHOLD + 100) || !IS_INRANGE(adcValue_SCL, ADCVALUE_3V3_THRESHOLD - 100, ADCVALUE_3V3_THRESHOLD + 100))
   {
+    OutPWR_off();
     VNEHC_SHOW_LOG_LN(F("BUGGGG"))
     VNEHC_SHOW_LOG(F("Volt PORT4 not 3V3 :"));
     VNEHC_SHOW_LOG_LN(String(adcValue_SDA * (5.0 / ADC_RESOLUTION), 3) + "/" + String(adcValue_SCL * (5.0 / ADC_RESOLUTION), 3));
@@ -413,6 +441,11 @@ uint8_t checkVolSignal4P()
 
 uint8_t checkVolSignal4P_sSerial()
 {
+  if(checkVolSignal4P_ShortWire(PIN_PORT4_RX, PIN_PORT4_TX) == VNEHC_List_Error_SIG_PIN3_SHORTED_PIN4)
+  {
+    return VNEHC_List_Error_SIG_PIN3_SHORTED_PIN4;
+  }
+
   pinMode(PIN_PORT4_RX, INPUT);
   pinMode(PIN_PORT4_TX, INPUT);
   delay(10);
@@ -433,6 +466,29 @@ uint8_t checkVolSignal4P_sSerial()
   return VNEHC_List_Error_None;
 }
 
+uint8_t checkVolSignal4P_ShortWire(int32_t paPin3, int32_t paPin4)
+{
+  pinMode(paPin3, INPUT);
+  pinMode(paPin4, OUTPUT);
+  digitalWrite(paPin4, LOW);
+  delay(10);
+  int adcValue_RX = analogRead(paPin3);
+  int adcValue_TX = analogRead(paPin4);
+  if(abs(adcValue_RX - adcValue_TX) <= 50)
+  {
+    VNEHC_SHOW_LOG_LN(F("BUGGGG"))
+    VNEHC_SHOW_LOG(F("PORT4 Short circuit (PIN3 shorted PIN4 !):"));
+    VNEHC_SHOW_LOG_LN(String(adcValue_RX * (5.0 / ADC_RESOLUTION), 3));
+    return VNEHC_List_Error_SIG_PIN3_SHORTED_PIN4;
+  }
+  else
+  {
+    VNEHC_SHOW_LOG_LN(F("Test Short circuit: GOOD"));
+    // VNEHC_SHOW_LOG_LN(String(adcValue_RX * (5.0 / ADC_RESOLUTION), 3) + "/" + String(adcValue_TX * (5.0 / ADC_RESOLUTION), 3));
+  }
+  return VNEHC_List_Error_None;
+}
+
 void delayms(uint32_t ms)
 {
   uint32_t start = millis();
@@ -444,9 +500,14 @@ void delayms(uint32_t ms)
   }
 }
 
-void addHelp(void *callback(void))
+void addHelp(void (*callback)(void))
 {
   user_callback_help = callback;
+}
+
+void addCMD(void (*callback)(void*))
+{
+  user_callback_CMD = callback;
 }
 
 void addOverCurrentCallback(void (*callback(float current_mA)))
@@ -472,6 +533,10 @@ void checkSerial()
     if(user_callback_help != NULL)
     {
       user_callback_help();
+    }
+    if(user_callback_CMD != NULL)
+    {
+      user_callback_CMD(&tempCmd);
     }
   }
 }
@@ -563,6 +628,9 @@ void showInfoWithErrorCode(VNEHC_List_Error errCode)
     VNEHC_SHOW_LOG_LN(F(" - R Pulldown Port3 Fail"));
     break;
   
+  case VNEHC_List_Error_SIG_PIN3_SHORTED_PIN4:
+    VNEHC_SHOW_LOG_LN(F(" - Port4 Short circuit (PIN3 shorted PIN4 !):"));
+    break;
   default:
     break;
   }
