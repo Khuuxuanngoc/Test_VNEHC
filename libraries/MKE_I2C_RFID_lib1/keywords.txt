@@ -1,0 +1,51 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+MKE_I2C_RFID	KEYWORD1
+MKE_I2C_RFID_Advanced	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+begin	KEYWORD2
+getI2CAddress	KEYWORD2
+setI2CAddress	KEYWORD2
+getModuleID	KEYWORD2
+getFirmwareVersion	KEYWORD2
+
+isCardPresent	KEYWORD2
+getUID	KEYWORD2
+getUIDSize	KEYWORD2
+getCardType	KEYWORD2
+getSAK	KEYWORD2
+getUIDFull	KEYWORD2
+
+setAuthKey	KEYWORD2
+authenticateKeyA	KEYWORD2
+authenticateKeyB	KEYWORD2
+readBlock	KEYWORD2
+writeBlock	KEYWORD2
+getLastStatus	KEYWORD2
+
+setValue	KEYWORD2
+getValue	KEYWORD2
+incrementValue	KEYWORD2
+decrementValue	KEYWORD2
+
+haltCard	KEYWORD2
+stopCrypto	KEYWORD2
+setAntennaGain	KEYWORD2
+getAntennaGain	KEYWORD2
+getRC522FirmwareVersion	KEYWORD2
+performSelfTest	KEYWORD2
+
+getProductCode	KEYWORD2
+getLastUnixtimeTest	KEYWORD2
+unlockAdminMode	KEYWORD2
+factoryReset	KEYWORD2
+isSectorTrailer	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+MKE_I2C_RFID_DEFAULT_ADDR	LITERAL1
