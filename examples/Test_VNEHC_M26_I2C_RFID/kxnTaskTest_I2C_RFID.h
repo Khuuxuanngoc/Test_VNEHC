@@ -4,8 +4,11 @@
 #include "kxnTask.h"
 #include <Wire.h>
 #include "MKE_I2C_RFID.h"
+#include "Task_VNEHC_Test.h"
 
 CREATE_TASK(kxnTaskTest_I2C_RFID)
+
+Task_VNEHC_Test * Task_VNEHC_Test1;
 
 MKE_I2C_RFID rfid;
 
@@ -14,26 +17,31 @@ MKE_I2C_RFID rfid;
 const uint32_t AUTHORIZED_UID_KXN = 0x41D14701; 
 const uint32_t AUTHORIZED_UID_HSHOP = 0x93294408; 
 
-void setup() {
+void setup(Task_VNEHC_Test *paTask_VNEHC_Test1 = NULL) {
+    Task_VNEHC_Test1 = paTask_VNEHC_Test1;
     // Serial.begin(115200);
     // Wire.begin();
     
     Serial.println(F("Initializing MKE_I2C_RFID..."));
     if (!rfid.begin()) {
         Serial.println(F("Failed to communicate with MKE_I2C_RFID. Check connections."));
-        while (1) {
-            delay(10);
-        }
+        Task_VNEHC_Test1->OutPWR_off();
+        // while (1) {
+        //     kxnTaskManager.run(millis());
+        // }
     }
-
-    Serial.print(F("RFID Module Found! Firmware Version: "));
-    Serial.println(rfid.getFirmwareVersion());
+    else
+    {
+        Serial.print(F("RFID Module Found! Firmware Version: "));
+        Serial.println(rfid.getFirmwareVersion());
+        
+        Serial.println(F("RFID System Ready."));
+        Serial.println(F("Bring a card close to the reader..."));
+        
+        kxnTaskManager.add(this);
+        setState(0);
+    }
     
-    Serial.println(F("RFID System Ready."));
-    Serial.println(F("Bring a card close to the reader..."));
-    
-    kxnTaskManager.add(this);
-    setState(0);
 }
 
 void loop() {
@@ -50,15 +58,18 @@ void loop() {
         if (uid == AUTHORIZED_UID_KXN || uid == AUTHORIZED_UID_HSHOP) {
             Serial.println(F("ACCESS GRANTED! GOOD!"));
             // Add your logic here (e.g., open a door, turn on a green LED)
+            Task_VNEHC_Test1->OutPWR_off();
         } else {
-            Serial.println(F("ACCESS DENIED! Unknown card."));
+            Serial.println(F("ACCESS DENIED! Unknown card.\t\tFAIL!"));
             // Add your logic here (e.g., trigger an alarm, turn on a red LED)
+            Task_VNEHC_Test1->OutPWR_off();
         }
         
         // Halt card (put into sleep state to prevent continuous reading)
         rfid.haltCard();
         
         kDelay(1000); // Wait 1 second before allowing a new card to be scanned
+        
         return; // Exit the loop to avoid multiple reads of the same card
     }
     

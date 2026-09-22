@@ -58,7 +58,7 @@ void setup() {
   // Task_VNEHC_Test1.OutPWR_off();
 
   // kxnTaskTest_I2C_Loadcell1.setup(200.0, &Task_VNEHC_Test1);
-  kxnTaskTest_I2C_RFID1.setup();
+  kxnTaskTest_I2C_RFID1.setup(&Task_VNEHC_Test1);
 }
 
 // the loop routine runs over and over again forever:
