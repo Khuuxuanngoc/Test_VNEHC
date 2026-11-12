@@ -38,6 +38,6 @@ void Vietduino_Task::setPeriodMs(unsigned long periodMs) {
   this->periodMicros = periodMs * 1000;
 }
 
-void Vietduino_Task::setPeriodUs(unsigned long periodMs) {
-  this->periodMicros = periodMs;
+void Vietduino_Task::setPeriodUs(unsigned long periodUs) {
+  this->periodMicros = periodUs;
 }

@@ -8,21 +8,12 @@
  * Contact: xuanngoc1992@gmail.com
  * Copyright: 2018 Ngoc Khuu
  * Copying permission statement:
-
-    Vietduino_Manager_Priority is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+ *
+ *  Vietduino_Manager_Priority is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ */
 
 #include "Arduino.h"
 #include "Vietduino_Manager_Priority.h"
@@ -31,17 +22,13 @@
  * Register a task in the timer Vietduino_Manager.
  */
 void Vietduino_Manager_Priority_class::add(Vietduino_Task* task) {
-
   // -- A task should be registered only once.
   this->remove(task);
   
   if(this->_tasks == NULL) {
-  
     // -- This is the first task being registered.
     this->_tasks = task;
-    
   } else {
-  
     Vietduino_Task* lastTask = this->_tasks;
     // -- Find the last task, to build a chain.
     while(lastTask->nextTask != NULL) {
@@ -49,13 +36,11 @@ void Vietduino_Manager_Priority_class::add(Vietduino_Task* task) {
     }
     // -- Last task found, let's add this task to the end of the chain.
     lastTask->nextTask = task;
-    
   }
   
   task->lastCallTimeMicros = micros() - task->periodMicros; // -- Start immediately after registering.
   task->nextTask = NULL;
 }
-
 
 /**
  * Remove registration of a task in the timer manager.
@@ -122,7 +107,6 @@ void Vietduino_Manager_Priority_class::testAndCall(Vietduino_Task* task) {
     task->lastCallTimeMicros = now;
   }
 }
-
 
 /**
  * Create a singleton from this manager class.

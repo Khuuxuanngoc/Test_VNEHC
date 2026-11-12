@@ -492,7 +492,7 @@
 
             };
       #endif
-#elif defined(CORE_ESP8266_FEATURES_H)
+#elif defined(CORE_ESP8266_FEATURES_H) || defined(ESP8266) || defined(ARDUINO_ARCH_ESP8266)
             
       #include <ESP8266WiFi.h>
 
@@ -550,6 +550,7 @@
                         delay(100);
                   }
             }
+            yield();
       }
 
       void ESP8266_BlinkScanWiFi(){

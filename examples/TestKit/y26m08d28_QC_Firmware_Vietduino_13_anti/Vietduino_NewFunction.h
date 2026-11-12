@@ -155,14 +155,14 @@ class Vietduino_NewFunction : public Vietduino_Task
   private:
     bool Enable;
 };
-#endif //__Vietduino_NewFunction_H__
 
 #ifdef MBLOCK5_IDE
 #pragma region Only use in Mblock5
   #define _delay        M_DELAY_S
-  // #define delay         M_DELAY
+  #define delay         M_DELAY
   extern void setup();
   extern void loop();
 #pragma endregion
 #endif
-#define delay         M_DELAY
+
+#endif // __VIETDUINO_H_NEW_FUNCTION_H__
